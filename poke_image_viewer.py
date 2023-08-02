@@ -29,7 +29,7 @@ root = Tk()
 root.title("Pokemon Information")
 root.geometry('600x600')
 root.columnconfigure(0, weight=1)
-root.rowconfigure(0, weight=1)
+root.rowconfigure(0, weight=0)
 
 # TODO: Set the icon
 app_id = 'comp593.pokeImageViewer'
@@ -39,7 +39,7 @@ ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
 frm = ttk.Frame(root)
 frm.columnconfigure(0, weight=1)
 frm.columnconfigure(1, weight=1)
-frm.rowconfigure(0, weight=1)
+frm.rowconfigure(0, weight=0)
 frm.grid(row=0, column=0, padx=5, pady=5, sticky=(NSEW, EW))
 
 image_path = ''   #Path could be anything
@@ -62,24 +62,20 @@ def display_pokemon_info():
             info_weight_label.config(text=f"Weight: {poke_info.get('weight', '')}")
             info_type_label.config(text=f"Type: {', '.join(poke_info.get('types', []))}")
 
-            stats = poke_info.get('stats', [])
-            stats_hp_bar.config(value=stats.get('hp', 0))
-            stats_attack_bar.config(value=stats.get('attack', 0))
-            stats_defense_bar.config(value=stats.get('defense', 0))
-            stats_special_attack_bar.config(value=stats.get('special_attack', 0))
-            stats_special_defense_bar.config(value=stats.get('special_defense', 0))
-            stats_speed_bar.config(value=stats.get('speed', 0))
-        else:
-            # Clear the labels and progress bars if no Pokemon info is available
-            info_height_label.config(text="Height:")
-            info_weight_label.config(text="Weight:")
-            info_type_label.config(text="Type:")
-            stats_hp_bar.config(value=0)
-            stats_attack_bar.config(value=0)
-            stats_defense_bar.config(value=0)
-            stats_special_attack_bar.config(value=0)
-            stats_special_defense_bar.config(value=0)
-            stats_speed_bar.config(value=0)
+        stats = poke_info.get('stats', [])
+        for stat in stats:
+            if stat['stat']['name'] == 'hp':
+                stats_hp_bar.config(value=stat['base_stat'])
+            elif stat['stat']['name'] == 'attack':
+                stats_attack_bar.config(value=stat['base_stat'])
+            elif stat['stat']['name'] == 'defense':
+                stats_defense_bar.config(value=stat['base_stat'])
+            elif stat['stat']['name'] == 'special-attack':
+                stats_special_attack_bar.config(value=stat['base_stat'])
+            elif stat['stat']['name'] == 'special-defense':
+                stats_special_defense_bar.config(value=stat['base_stat'])
+            elif stat['stat']['name'] == 'speed':
+                stats_speed_bar.config(value=stat['base_stat'])  
 
 btn_get_info = ttk.Button(frm, text='Get Info', command=display_pokemon_info)
 btn_get_info.grid(row=0, column=1, padx=5, pady=5, sticky=NSEW)
@@ -98,7 +94,7 @@ btn_set_desktop.grid(row=3, column=0, columnspan=2, padx=5, pady=5, sticky=NSEW)
 
 # TODO: Populate frames with widgets and define event handler functions
 info_frame = ttk.Frame(frm, padding=10, relief='sunken')
-info_frame.grid(row=0, column=0, padx=5, pady=5, sticky=NSEW)
+info_frame.grid(row=1, column=0, padx=5, pady=5, sticky=NSEW)
 
 info_height_label = ttk.Label(info_frame, text="Height:")
 info_height_label.grid(row=0, column=0, sticky=W)
@@ -110,7 +106,7 @@ info_type_label = ttk.Label(info_frame, text="Type:")
 info_type_label.grid(row=2, column=0, sticky=W)
 
 stats_frame = ttk.Frame(frm, padding=10, relief='sunken')
-stats_frame.grid(row=0, column=1, padx=5, pady=5, sticky=NSEW)
+stats_frame.grid(row=1, column=1, padx=5, pady=5, sticky=NSEW)
 
 stats_hp_label = ttk.Label(stats_frame, text="HP", width=0)
 stats_hp_label.grid(row=0, column=0, sticky=EW)
