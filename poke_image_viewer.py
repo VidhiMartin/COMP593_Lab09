@@ -27,7 +27,7 @@ if not os.path.isdir(images_dir):
 # Create the main window
 root = Tk()
 root.title("Pokemon Information")
-root.geometry('600x600')
+root.geometry('600x350')
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=0)
 
@@ -39,7 +39,6 @@ ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
 frm = ttk.Frame(root)
 frm.columnconfigure(0, weight=1)
 frm.columnconfigure(1, weight=1)
-frm.rowconfigure(0, weight=0)
 frm.grid(row=0, column=0, padx=5, pady=5, sticky=(NSEW, EW))
 
 image_path = ''   #Path could be anything
@@ -47,7 +46,7 @@ image_path = ''   #Path could be anything
 #create list of pull down pokemon names
 pokemon_list = poke_api.get_pokemon_names()
 pokemon_list.sort()
-cbox_poke_sel = ttk.Combobox(frm, values=pokemon_list, state='readonly')
+cbox_poke_sel = ttk.Combobox(frm, values=pokemon_list, state='readonly', width = 20)
 cbox_poke_sel.set("Select a Pokemon")
 cbox_poke_sel.grid(row=0, column=0, padx=5, pady=5, sticky=NSEW)
 
@@ -61,7 +60,7 @@ def display_pokemon_info():
         info_height_label.config(text=f"Height: {poke_info.get('height', '')}")
         info_weight_label.config(text=f"Weight: {poke_info.get('weight', '')}")
             
-        types = [t['type']['name'] for t in poke_info.get('types', [])]
+        types = [t['type']['name'] for t in poke_info.get('types', [])]   #iterating the get info loop
         info_type_label.config(text=f"Type: {' '.join(types)}")
         stats = poke_info.get('stats', [])
 
@@ -79,7 +78,7 @@ def display_pokemon_info():
             elif stat['stat']['name'] == 'speed':
                 stats_speed_bar.config(value = stat['base_stat'])
 
-btn_get_info = ttk.Button(frm, text='Get Info', command=display_pokemon_info)
+btn_get_info = ttk.Button(frm, text='Get Info', command=display_pokemon_info, width = 20)
 btn_get_info.grid(row=0, column=1, padx=5, pady=5, sticky=NSEW)
 
 
