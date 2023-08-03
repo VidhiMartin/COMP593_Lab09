@@ -57,25 +57,27 @@ def display_pokemon_info():
     selected_pokemon = cbox_poke_sel.get()
     if selected_pokemon:
         poke_info = poke_api.get_pokemon_info(selected_pokemon)
-        if poke_info:
-            info_height_label.config(text=f"Height: {poke_info.get('height', '')}")
-            info_weight_label.config(text=f"Weight: {poke_info.get('weight', '')}")
-            info_type_label.config(text=f"Type: {', '.join(poke_info.get('types', []))}")
-
+    if poke_info:
+        info_height_label.config(text=f"Height: {poke_info.get('height', '')}")
+        info_weight_label.config(text=f"Weight: {poke_info.get('weight', '')}")
+            
+        types = [t['type']['name'] for t in poke_info.get('types', [])]
+        info_type_label.config(text=f"Type: {' '.join(types)}")
         stats = poke_info.get('stats', [])
-        for stat in stats:
+
+        for stat in stats:    #Running the progressbars
             if stat['stat']['name'] == 'hp':
-                stats_hp_bar.config(value=stat['base_stat'])
+                stats_hp_bar.config(value = stat['base_stat'])
             elif stat['stat']['name'] == 'attack':
-                stats_attack_bar.config(value=stat['base_stat'])
+                stats_attack_bar.config(value = stat['base_stat'])
             elif stat['stat']['name'] == 'defense':
-                stats_defense_bar.config(value=stat['base_stat'])
+                stats_defense_bar.config(value = stat['base_stat'])
             elif stat['stat']['name'] == 'special-attack':
-                stats_special_attack_bar.config(value=stat['base_stat'])
+                stats_special_attack_bar.config(value = stat['base_stat'])
             elif stat['stat']['name'] == 'special-defense':
-                stats_special_defense_bar.config(value=stat['base_stat'])
+                stats_special_defense_bar.config(value = stat['base_stat'])
             elif stat['stat']['name'] == 'speed':
-                stats_speed_bar.config(value=stat['base_stat'])  
+                stats_speed_bar.config(value = stat['base_stat'])
 
 btn_get_info = ttk.Button(frm, text='Get Info', command=display_pokemon_info)
 btn_get_info.grid(row=0, column=1, padx=5, pady=5, sticky=NSEW)
@@ -126,7 +128,8 @@ stats_special_defense_label.grid(row=4, column=0, sticky=EW)
 stats_speed_label = ttk.Label(stats_frame, text="Speed", width=0)
 stats_speed_label.grid(row=5, column=0, sticky=EW)
 
-bar_length = 100  # Adjust this value as needed
+#Adjusting the bars 
+bar_length = 100    
 stats_hp_bar = ttk.Progressbar(stats_frame, length=bar_length, mode='determinate')
 stats_hp_bar.grid(row=0, column=1, sticky=W)
 
